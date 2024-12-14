@@ -8,15 +8,7 @@ namespace Dusterio\LinkPreview\Contracts;
  */
 interface ReaderInterface
 {
-    /**
-     * @param LinkInterface $link
-     * @return LinkInterface
-     */
-    public function readLink(LinkInterface $link);
+    public function readLink(LinkInterface $link): LinkInterface;
 
-    /**
-     * @param array $parameters
-     * @return void
-     */
-    public function config(array $parameters);
+    public function config(array $parameters): void;
 }

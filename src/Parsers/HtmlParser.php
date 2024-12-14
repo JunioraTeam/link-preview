@@ -56,16 +56,11 @@ class HtmlParser extends BaseParser implements ParserInterface
 
     /**
      * Smaller images will be ignored
-     * @var int
      */
-    private $imageMinimumWidth = 300;
-    private $imageMinimumHeight = 300;
+    private int $imageMinimumWidth = 300;
+    private int $imageMinimumHeight = 300;
 
-    /**
-     * @param ReaderInterface $reader
-     * @param PreviewInterface $preview
-     */
-    public function __construct(ReaderInterface $reader = null, PreviewInterface $preview = null)
+    public function __construct(?ReaderInterface $reader = null, ?PreviewInterface $preview = null)
     {
         $this->setReader($reader ?: new HttpReader());
         $this->setPreview($preview ?: new HtmlPreview());
@@ -74,17 +69,13 @@ class HtmlParser extends BaseParser implements ParserInterface
     /**
      * @inheritdoc
      */
-    public function __toString()
+    public function __toString(): string
     {
         return 'general';
     }
 
 
-    /**
-     * @param int $width
-     * @param int $height
-     */
-    public function setMinimumImageDimension($width, $height)
+    public function setMinimumImageDimension(int $width, int $height): void
     {
         $this->imageMinimumWidth = $width;
         $this->imageMinimumHeight = $height;
@@ -93,7 +84,7 @@ class HtmlParser extends BaseParser implements ParserInterface
     /**
      * @inheritdoc
      */
-    public function canParseLink(LinkInterface $link)
+    public function canParseLink(LinkInterface $link): bool
     {
         return !filter_var($link->getUrl(), FILTER_VALIDATE_URL) === false;
     }
@@ -101,7 +92,7 @@ class HtmlParser extends BaseParser implements ParserInterface
     /**
      * @inheritdoc
      */
-    public function parseLink(LinkInterface $link)
+    public function parseLink(LinkInterface $link): static
     {
         $link = $this->readLink($link);
 
@@ -116,11 +107,7 @@ class HtmlParser extends BaseParser implements ParserInterface
         return $this;
     }
 
-    /**
-     * @param LinkInterface $link
-     * @return array
-     */
-    protected function parseImage(LinkInterface $link)
+    protected function parseImage(LinkInterface $link): array
     {
         return [
             'cover' => $link->getEffectiveUrl(),
@@ -132,16 +119,14 @@ class HtmlParser extends BaseParser implements ParserInterface
 
     /**
      * Extract required data from html source
-     * @param LinkInterface $link
-     * @return array
      */
-    protected function parseHtml(LinkInterface $link)
+    protected function parseHtml(LinkInterface $link): array
     {
         $images = [];
 
         try {
             $parser = new Crawler();
-	    $parser->addHtmlContent($link->getContent());
+	        $parser->addHtmlContent($link->getContent());
 
             // Parse all known tags
             foreach($this->tags as $tag => $selectors) {

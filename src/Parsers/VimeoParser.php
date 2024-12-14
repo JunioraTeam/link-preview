@@ -23,7 +23,7 @@ class VimeoParser extends BaseParser implements ParserInterface
      * @param ReaderInterface $reader
      * @param PreviewInterface $preview
      */
-    public function __construct(ReaderInterface $reader = null, PreviewInterface $preview = null)
+    public function __construct(?ReaderInterface $reader = null, ?PreviewInterface $preview = null)
     {
         $this->setReader($reader ?: new HttpReader());
         $this->setPreview($preview ?: new VideoPreview());
@@ -32,7 +32,7 @@ class VimeoParser extends BaseParser implements ParserInterface
     /**
      * @inheritdoc
      */
-    public function __toString()
+    public function __toString(): string
     {
         return 'vimeo';
     }
@@ -40,7 +40,7 @@ class VimeoParser extends BaseParser implements ParserInterface
     /**
      * @inheritdoc
      */
-    public function canParseLink(LinkInterface $link)
+    public function canParseLink(LinkInterface $link): bool
     {
         return (preg_match(static::PATTERN, $link->getUrl()));
     }
@@ -48,7 +48,7 @@ class VimeoParser extends BaseParser implements ParserInterface
     /**
      * @inheritdoc
      */
-    public function parseLink(LinkInterface $link)
+    public function parseLink(LinkInterface $link): static
     {
         preg_match(static::PATTERN, $link->getUrl(), $matches);
 

@@ -15,27 +15,32 @@ class Client
     /**
      * @var ParserInterface[]
      */
-    private $parsers = [];
+    private array $parsers = [];
+
+    private ?Link $link = null;
 
     /**
-     * @var Link $link
+     * @param string|null $url Request address
      */
-    private $link;
-
-    /**
-     * @param string $url Request address
-     */
-    public function __construct($url = null)
+    public function __construct(?string $url = null)
     {
-        if ($url) $this->setUrl($url);
+        if (! is_null($url)) {
+            $this->setUrl($url);
+        }
         $this->addDefaultParsers();
+    }
+
+    public function getLink(): ?Link
+    {
+        return $this->link;
     }
 
     /**
      * Try to get previews from as many parsers as possible
+     * 
      * @return PreviewInterface[]
      */
-    public function getPreviews()
+    public function getPreviews(): array
     {
         $parsed = [];
 
@@ -49,11 +54,10 @@ class Client
 
     /**
      * Get a preview from a single parser
-     * @param string $parserId
+     * 
      * @throws UnknownParserException
-     * @return PreviewInterface|boolean
      */
-    public function getPreview($parserId)
+    public function getPreview(string $parserId): PreviewInterface|bool
     {
         if (array_key_exists($parserId, $this->getParsers())) {
             $parser = $this->getParsers()[$parserId];
@@ -64,22 +68,15 @@ class Client
 
     /**
      * Add parser to the beginning of parsers list
-     *
-     * @param ParserInterface $parser
-     * @return $this
      */
-    public function addParser(ParserInterface $parser)
+    public function addParser(ParserInterface $parser): self
     {
         $this->parsers = [(string) $parser => $parser] + $this->parsers;
 
         return $this;
     }
 
-    /**
-     * @param $id
-     * @return bool|ParserInterface
-     */
-    public function getParser($id)
+    public function getParser($id): bool|ParserInterface
     {
         return isset($this->parsers[$id]) ? $this->parsers[$id] : false;
     }
@@ -88,7 +85,7 @@ class Client
      * Get parsers
      * @return ParserInterface[]
      */
-    public function getParsers()
+    public function getParsers(): array
     {
         return $this->parsers;
     }
@@ -96,30 +93,20 @@ class Client
     /**
      * Set parsers
      * @param ParserInterface[] $parsers
-     * @return $this
      */
-    public function setParsers($parsers)
+    public function setParsers(array $parsers): self
     {
         $this->parsers = $parsers;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getUrl()
+    public function getUrl(): string
     {
         return (!empty($this->link->getEffectiveUrl())) ? $this->link->getEffectiveUrl() : $this->link->getUrl();
     }
 
-    /**
-     * Set target url
-     *
-     * @param string $url Website url to parse
-     * @return $this
-     */
-    public function setUrl($url)
+    public function setUrl(string $url): self
     {
         $this->link = new Link($url);
 
@@ -130,9 +117,8 @@ class Client
      * Remove parser from parsers list
      *
      * @param string $name Parser name
-     * @return $this
      */
-    public function removeParser($name)
+    public function removeParser(string $name): self
     {
         if (in_array($name, $this->parsers, false)) {
             unset($this->parsers[$name]);
@@ -143,9 +129,8 @@ class Client
 
     /**
      * Add default parsers
-     * @return void
      */
-    protected function addDefaultParsers()
+    protected function addDefaultParsers(): void
     {
         $this->addParser(new HtmlParser());
         $this->addParser(new YouTubeParser());

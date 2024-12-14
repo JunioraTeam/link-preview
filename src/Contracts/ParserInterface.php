@@ -11,52 +11,35 @@ interface ParserInterface
 {
     /**
      * Set default reader and model
-     * @param ReaderInterface $reader
-     * @param PreviewInterface $preview
      */
-    public function __construct(ReaderInterface $reader = null, PreviewInterface $preview);
+    public function __construct(?ReaderInterface $reader = null, ?PreviewInterface $preview = null);
 
     /**
      * Parsers name
-     * @return string
      */
-    public function __toString();
+    public function __toString(): string;
 
     /**
      * Get reader
-     * @return ReaderInterface
      */
-    public function getReader();
+    public function getReader(): ReaderInterface;
 
     /**
      * Set reader
-     * @param ReaderInterface $reader
-     * @return $this
      */
-    public function setReader(ReaderInterface $reader);
+    public function setReader(ReaderInterface $reader): static;
 
-    /**
-     * @return PreviewInterface
-     */
-    public function getPreview();
+    public function getPreview(): PreviewInterface;
 
-    /**
-     * @param PreviewInterface $preview
-     * @return $this
-     */
-    public function setPreview(PreviewInterface $preview);
+    public function setPreview(PreviewInterface $preview): static;
 
     /**
      * Can this parser parse the link supplied?
-     * @param LinkInterface $link
-     * @return boolean
      */
-    public function canParseLink(LinkInterface $link);
+    public function canParseLink(LinkInterface $link): bool;
 
     /**
      * Parse link
-     * @param LinkInterface $link
-     * @return $this
      */
-    public function parseLink(LinkInterface $link);
+    public function parseLink(LinkInterface $link): static;
 }

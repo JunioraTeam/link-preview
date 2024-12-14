@@ -2,83 +2,59 @@
 
 namespace Dusterio\LinkPreview\Contracts;
 
-/**
- * Interface LinkInterface
- * @codeCoverageIgnore
- */
 interface LinkInterface
 {
     /**
      * LinkInterface constructor.
-     * @param string $url
      */
-    public function __construct($url);
+    public function __construct(string $url);
 
     /**
      * Get source code
-     * @return string
      */
-    public function getContent();
+    public function getContent(): string;
 
     /**
      * Set source code
-     * @param string $content
-     * @return $this
      */
-    public function setContent($content);
+    public function setContent(string $content): static;
 
     /**
      * Get source content type (example: text/html, image/jpg)
-     * @return string
      */
-    public function getContentType();
+    public function getContentType(): string;
 
     /**
      * Set source content type (example: text/html, image/jpg)
-     * @param string $contentType
-     * @return $this
      */
-    public function setContentType($contentType);
+    public function setContentType(string $contentType): static;
 
     /**
      * Get website url
-     * @return string
      */
-    public function getUrl();
+    public function getUrl(): string;
 
     /**
      * Set website url
-     * @param string $url
-     * @return $this
      */
-    public function setUrl($url);
+    public function setUrl(string $url): static;
 
-    /**
-     * @return string
-     */
-    public function getEffectiveUrl();
+    public function getEffectiveUrl(): string;
 
-    /**
-     * @param string $effectiveUrl
-     * @return $this
-     */
-    public function setEffectiveUrl($effectiveUrl);
+    public function setEffectiveUrl(string $effectiveUrl): static;
 
     /**
      * Is this link an HTML page?
-     * @return boolean
      */
-    public function isHtml();
+    public function isHtml(): bool;
 
     /**
      * Is this link an image?
-     * @return boolean
      */
-    public function isImage();
+    public function isImage(): bool;
 
     /**
      * Is this link functioning? (could we open it?)
-     * @return boolean
      */
-    public function isUp();
+    public function isUp(): bool;
 }

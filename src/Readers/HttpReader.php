@@ -9,31 +9,15 @@ use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\TransferStats;
 use GuzzleHttp\Exception\ConnectException;
 
-/**
- * Class HttpReader
- */
 class HttpReader implements ReaderInterface
 {
-    /**
-     * @var Client $client
-     */
-    private $client;
+    private ?Client $client = null;
 
-    /**
-     * @var array $config
-     */
-    private $config;
+    private array $config;
 
-    /**
-     * @var CookieJar $jar
-     */
-    private $jar;
+    private CookieJar $jar;
 
-    /**
-     * HttpReader constructor.
-     * @param array|null $config
-     */
-    public function __construct($config = null)
+    public function __construct(?array $config = null)
     {
         $this->jar = new CookieJar();
 
@@ -47,53 +31,36 @@ class HttpReader implements ReaderInterface
         ];
     }
 
-    /**
-     * @param int $timeout
-     */
-    public function setTimeout($timeout)
+    public function setTimeout(int $timeout): void
     {
         $this->config(['connect_timeout' => $timeout]);
     }
 
-    /**
-     * @param array $parameters
-     */
-    public function config(array $parameters)
+    public function config(array $parameters): void
     {
         foreach ($parameters as $key => $value) {
             $this->config[$key] = $value;
         }
     }
 
-    /**
-     * @return Client
-     */
-    public function getClient()
+    public function getClient(): Client
     {
-        if (!$this->client) {
+        if (is_null($this->client)) {
             $this->client = new Client();
         }
 
         return $this->client;
     }
 
-    /**
-     * @param Client $client
-     */
-    public function setClient($client)
+    public function setClient(Client $client): void
     {
         $this->client = $client;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function readLink(LinkInterface $link)
+    public function readLink(LinkInterface $link): LinkInterface
     {
-        $client = $this->getClient();
-
         try {
-            $response = $client->request('GET', $link->getUrl(), array_merge($this->config, [
+            $response = $this->getClient()->request('GET', $link->getUrl(), array_merge($this->config, [
                 'on_stats' => function (TransferStats $stats) use (&$link) {
                     $link->setEffectiveUrl($stats->getEffectiveUri());
                 }
